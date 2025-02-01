@@ -42,7 +42,7 @@ suitable for flashing to an sd-card can be found at the attribute
 `rpi-example` in the above configuration example you could run:
 
 ```
-nix build '.#nixosConfigurations.rpi-example.config.system.build.sdImage'
+nix build '.#nixosConfigurations.rpi-4b.config.system.build.sdImage'
 ```
 
 ## The firmware partition
