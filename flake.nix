@@ -66,7 +66,7 @@
         sd-image = import ./sd-image;
       };
       nixosConfigurations = {
-        rpi-example = srcs.nixpkgs.lib.nixosSystem {
+        rpi-4b = srcs.nixpkgs.lib.nixosSystem {
           system = "aarch64-linux";
           modules = [ self.nixosModules.raspberry-pi self.nixosModules.sd-image ./example ];
         };
