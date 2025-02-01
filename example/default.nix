@@ -1,6 +1,6 @@
 { pkgs, lib, ... }: 
 let 
-  import pubkey = ./../pubkeys.nix
+  pubkey = import ./../pubkeys.nix;
   user = "pungkula";
 in
 {
@@ -25,16 +25,28 @@ in
       };
   };
 
-  users.users.root.initialPassword = "root";
+
    
-  users."${user}" = {
-    hashedPassword = "$y$j9T$m8hPD36i1VMaO5rurbZ4j0$KpzQyat.F6NoWFKpisEj77TvpN2wBGB8ezd26QoKDj6";
-    isNormalUser = true;
-    description = "${user}";
-    group = "${user}";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [ ];
-  };
+  users = {
+      defaultUserShell = pkgs.bash; 
+      groups = {
+          "${user}" = { };
+      };
+      mutableUsers = false;
+      users.root.initialPassword = "root";
+      users."${user}" = {
+        hashedPassword = "$y$j9T$m8hPD36i1VMaO5rurbZ4j0$KpzQyat.F6NoWFKpisEj77TvpN2wBGB8ezd26QoKDj6";
+        isNormalUser = true;
+        description = "${user}";
+        group = "${user}";
+        extraGroups = [ "networkmanager" "wheel" ];
+        packages = with pkgs; [ ];
+        openssh.authorizedKeys.keys = [ 
+          pubkey.desktop
+          pubkey.laptop
+        ];
+      };
+  };    
   networking = {
     hostName = "pi";
     useDHCP = false;
@@ -77,10 +89,7 @@ in
   };
   networking.firewall.allowedTCPPorts = [ 22 ];
 
-  users.users.${user}.openssh.authorizedKeys.keys = [ 
-      pubkey.desktop
-      pubkey.laptop
-  ];
+
 
   services.openssh = {
       enable = true;
